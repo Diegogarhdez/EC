@@ -1,5 +1,5 @@
 $date
-	Thu Nov 14 17:13:40 2024
+	Fri Nov 15 18:52:03 2024
 $end
 $version
 	Icarus Verilog
@@ -304,8 +304,7 @@ $var reg 1 ;" we3 $end
 $var reg 1 <" wez $end
 $scope module uut $end
 $var wire 3 =" Op [2:0] $end
-$var wire 10 >" PC_actual [9:0] $end
-$var wire 10 ?" PC_nuevo [9:0] $end
+$var wire 10 >" PC_nuevo [9:0] $end
 $var wire 1 7" clk $end
 $var wire 1 8" reset $end
 $var wire 1 9" s_inc $end
@@ -313,14 +312,15 @@ $var wire 1 :" s_inm $end
 $var wire 1 ;" we3 $end
 $var wire 1 <" wez $end
 $var wire 1 4" z $end
-$var wire 1 @" zero $end
-$var wire 8 A" salida_alu [7:0] $end
-$var wire 8 B" WD3 [7:0] $end
-$var wire 4 C" WA3 [3:0] $end
-$var wire 8 D" RD2 [7:0] $end
-$var wire 8 E" RD1 [7:0] $end
-$var wire 4 F" RA2 [3:0] $end
-$var wire 4 G" RA1 [3:0] $end
+$var wire 1 ?" zero $end
+$var wire 8 @" salida_alu [7:0] $end
+$var wire 8 A" WD3 [7:0] $end
+$var wire 4 B" WA3 [3:0] $end
+$var wire 8 C" RD2 [7:0] $end
+$var wire 8 D" RD1 [7:0] $end
+$var wire 4 E" RA2 [3:0] $end
+$var wire 4 F" RA1 [3:0] $end
+$var wire 10 G" PC_actual [9:0] $end
 $var wire 6 H" Opcode [5:0] $end
 $var wire 16 I" Instruccion [15:0] $end
 $var wire 8 J" Inmediato [7:0] $end
@@ -336,66 +336,58 @@ $scope module bankanshat $end
 $var wire 4 Q" RA1 [3:0] $end
 $var wire 4 R" RA2 [3:0] $end
 $var wire 4 S" WA3 [3:0] $end
+$var wire 8 T" WD3 [7:0] $end
 $var wire 1 7" clk $end
 $var wire 1 ;" we3 $end
-$var wire 8 T" WD3 [7:0] $end
 $var wire 8 U" RD2 [7:0] $end
 $var wire 8 V" RD1 [7:0] $end
 $upscope $end
 $scope module ffd1 $end
 $var wire 1 <" carga $end
 $var wire 1 7" clk $end
-$var wire 1 @" d $end
+$var wire 1 ?" d $end
 $var wire 1 8" reset $end
 $var reg 1 W" q $end
 $upscope $end
 $scope module memoria_programa $end
-$var wire 10 X" Address [9:0] $end
-$var wire 16 Y" Data [15:0] $end
+$var wire 16 X" Data [15:0] $end
 $var wire 1 7" clk $end
+$var wire 10 Y" Address [9:0] $end
 $upscope $end
 $scope module mux_alu $end
-$var wire 8 Z" Inmediato [7:0] $end
-$var wire 1 :" s_inm $end
-$var wire 8 [" salida_alu [7:0] $end
-$var wire 8 \" WD3 [7:0] $end
+$var wire 10 Z" D0 [9:0] $end
+$var wire 10 [" D1 [9:0] $end
+$var wire 1 :" s $end
+$var wire 10 \" Y [9:0] $end
+$var parameter 32 ]" WIDTH $end
 $upscope $end
 $scope module mux_pc $end
-$var wire 10 ]" Dir_salto [9:0] $end
-$var wire 10 ^" PC_actual [9:0] $end
-$var wire 10 _" PC_nuevo [9:0] $end
-$var wire 1 9" s_inc $end
+$var wire 10 ^" D0 [9:0] $end
+$var wire 10 _" Y [9:0] $end
+$var wire 1 9" s $end
+$var wire 10 `" D1 [9:0] $end
+$var parameter 32 a" WIDTH $end
+$upscope $end
+$scope module registro_pc $end
+$var wire 10 b" D [9:0] $end
+$var wire 1 7" clk $end
+$var wire 1 8" reset $end
+$var parameter 32 c" WIDTH $end
+$var reg 10 d" Q [9:0] $end
 $upscope $end
 $scope module suma1 $end
-$var wire 10 `" PC_actual [9:0] $end
-$var wire 10 a" PC_mas_1 [9:0] $end
+$var wire 10 e" A [9:0] $end
+$var wire 10 f" B [9:0] $end
+$var wire 10 g" Y [9:0] $end
 $upscope $end
 $upscope $end
-$upscope $end
-$scope module mux2 $end
-$var wire 8 b" D0 [7:0] $end
-$var wire 8 c" D1 [7:0] $end
-$var wire 1 d" s $end
-$var wire 8 e" Y [7:0] $end
-$var parameter 32 f" WIDTH $end
-$upscope $end
-$scope module registro $end
-$var wire 8 g" D [7:0] $end
-$var wire 1 h" clk $end
-$var wire 1 i" reset $end
-$var parameter 32 j" WIDTH $end
-$var reg 8 k" Q [7:0] $end
-$upscope $end
-$scope module sum $end
-$var wire 10 l" A [9:0] $end
-$var wire 10 m" B [9:0] $end
-$var wire 10 n" Y [9:0] $end
 $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b1000 j"
-b1000 f"
+b1010 c"
+b1010 a"
+b1010 ]"
 b1 1"
 b110 0"
 b101 /"
@@ -414,53 +406,45 @@ b1 0
 $end
 #0
 $dumpvars
-bx n"
-bz m"
-bz l"
-bx k"
-zi"
-zh"
-bz g"
-bz e"
-zd"
-bz c"
-bz b"
-bx a"
-bx `"
+bx g"
+b1 f"
+bx e"
+b0 d"
+bx b"
+b0 `"
 bx _"
-bz ^"
-bx ]"
-bx \"
-bx ["
-bx Z"
-bx Y"
-bz X"
+b101 ^"
+b0 \"
+b0 ["
+b0 Z"
+b0 Y"
+b100000000000101 X"
 0W"
-bx V"
-bx U"
-bx T"
-bx S"
-bx R"
-bx Q"
-xP"
-bx O"
-bx N"
-bx M"
+b0 V"
+b0 U"
+b0 T"
+b101 S"
+b0 R"
+b0 Q"
+1P"
+b0 O"
+b0 N"
+b0 M"
 b0 L"
-bx K"
-bx J"
-bx I"
-bx H"
-bx G"
-bx F"
-bx E"
-bx D"
-bx C"
-bx B"
-bx A"
-x@"
-bx ?"
-bz >"
+b101 K"
+b0 J"
+b100000000000101 I"
+b10000 H"
+b0 G"
+b0 F"
+b0 E"
+b0 D"
+b0 C"
+b101 B"
+b0 A"
+b0 @"
+x?"
+bx >"
 b0 ="
 0<"
 0;"
@@ -469,7 +453,7 @@ b0 ="
 18"
 07"
 b0 6"
-bx 5"
+b10000 5"
 z4"
 bx 3"
 bx 2"
@@ -576,6 +560,11 @@ $end
 0x
 0p
 #500
+0?"
+0P"
+b11111111 ["
+b11111111 @"
+b11111111 O"
 b1 6"
 b1 ="
 b1 L"
@@ -586,7 +575,38 @@ b1 L"
 07"
 08"
 #1500
-xW"
+bx C"
+bx M"
+bx U"
+bx D"
+bx N"
+bx V"
+b0xxxxxxxx Z"
+bx J"
+bx B"
+bx S"
+bx E"
+bx R"
+bx F"
+bx Q"
+bx K"
+bx ^"
+bx 5"
+bx H"
+bx I"
+bx X"
+bx G"
+bx Y"
+bx `"
+bx d"
+bx A"
+bx T"
+x?"
+xP"
+b0xxxxxxxx ["
+bx @"
+bx O"
+b0xxxxxxxx \"
 b10 6"
 b10 ="
 b10 L"
@@ -597,6 +617,7 @@ b10 L"
 #2000
 07"
 #2500
+xW"
 b11 6"
 b11 ="
 b11 L"
