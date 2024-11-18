@@ -19,10 +19,8 @@ module microc(output wire [5:0] Opcode, output wire z, input wire clk, reset, s_
   assign WA3 = Instruccion[3:0];
   // Flag de zero.
   wire zero;
-  // Conexión de salida de la ALU.
-  wire [7:0] salida_alu;
-  // 
-  wire [7:0] RD1, RD2, WD3, Inmediato;
+  // Conexión de salida de la ALU, del inmediato y de los registros.
+  wire [7:0] RD1, RD2, WD3, Inmediato, salida_alu;
   // Obtención del inmediato.
   assign Inmediato = Instruccion[11:4];
   // Multiplexor 2 a 1 para la ALU.
