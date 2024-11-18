@@ -26,7 +26,7 @@ module microc(output wire [5:0] Opcode, output wire z, input wire clk, reset, s_
   // Multiplexor 2 a 1 para la ALU.
   mux2 #(8) mux_alu(WD3, Inmediato, salida_alu, s_inm);
   // Sumador del Program Counter.
-  sum suma1(PC_nuevo, PC_actual, 10'b0000000001);
+  sum suma1(PC_nuevo, PC_actual, 10'b1);
   // Multiplexor 2 a 1 para el Program Counter.
   mux2 #(10) mux_pc(PC_nuevo, Dir_salto, PC_actual, s_inc);
   // Declaración del Banco de Registros.

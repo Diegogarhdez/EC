@@ -35,28 +35,28 @@ module microc_tb;
 
   // Bloque de simulación basado en Opcode
   initial begin
-    
+
     // Simular instrucciones basadas en Opcode
-    repeat (14) begin
+    repeat (6) begin
       case (Opcode)
         6'b1xxxxx: begin  // Instrucción operación de la alu
           s_inc = 1; s_inm = 0; we3 = 1; wez = 0;
-          Op = Opcode[14:12];  // Placeholder para "acción programable"
+          Op = Opcode[2:0];  
         end
 
         6'b000000: begin  // Instrucción not
           s_inc = 1; s_inm = 0; we3 = 0; wez = 0;
-          Op = 3'bxxx;  // Placeholder para "acción programable"
+          Op = 3'b0;  
         end
 
         6'b0001xx: begin  // Instrucción li
           s_inc = 1; s_inm = 1; we3 = 1; wez = 0;
-          Op = 3'bxxx;  // Placeholder para "acción programable"
+          Op = 3'b0;  
         end
 
         6'b010000: begin  // Instrucción j
           s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
-          Op = 3'bxxx;  // Placeholder para "acción programable"
+          Op = 3'b0;  
         end
 
         6'b010001: begin  // Instrucción jz
@@ -66,7 +66,7 @@ module microc_tb;
         else begin 
           s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
         end
-          Op = 3'bxxx; // Placeholder para "acción programable"
+          Op = 3'b0; 
         end
 
         6'b010010: begin  // Instrucción jnz
@@ -76,7 +76,7 @@ module microc_tb;
         else begin 
           s_inc = 1; s_inm = 0; we3 = 0; wez = 1;
         end
-          Op = 3'bxxx; // Placeholder para "acción programable"
+          Op = 3'b0; 
         end
 
         default: begin  // Opcodes no definidos
