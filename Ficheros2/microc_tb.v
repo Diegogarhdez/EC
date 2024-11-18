@@ -9,18 +9,7 @@ module microc_tb;
   wire z;
   wire [5:0] Opcode;
 
-  // instanciación del camino de datos
-  microc uut (
-    .Opcode(Opcode),
-    .z(z),
-    .clk(clk),
-    .reset(reset),
-    .s_inc(s_inc),
-    .s_inm(s_inm),
-    .we3(we3),
-    .wez(wez),
-    .Op(Op)
-  );
+  microc microc1(Opcode, z, clk, reset, s_inc, s_inm , we3, wez, Op);
 
   // generación de reloj clk
   initial begin
@@ -44,75 +33,67 @@ module microc_tb;
     #10 reset = 0;  // Desactivar reset después de 10 ns
   end
 
-  // Bloque simulación señales control por ciclo
+  // Bloque de simulación basado en Opcode
   initial begin
-    // retardos y señales para ejecutar primera instrucción (ciclo 1)
-    #5;  // Esperar media señal de reloj para simular decodificación
-    s_inc = 1;
-    s_inm = 0;
-    we3 = 1;
-    wez = 0;
-    Op = 3'b001;
-    #5;  // Completar el ciclo
+    
+    // Simular instrucciones basadas en Opcode
+    repeat (14) begin
+      case (Opcode)
+        6'b1xxxxx: begin  // Instrucción operación de la alu
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 0;
+          Op = Opcode[14:12];  // Placeholder para "acción programable"
+        end
 
-    // retardos y señales para ejecutar segunda instrucción (ciclo 2)
-    #5;
-    s_inc = 0;
-    s_inm = 1;
-    we3 = 1;
-    wez = 1;
-    Op = 3'b010;
-    #5;
+        6'b000000: begin  // Instrucción not
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 0;
+          Op = 3'bxxx;  // Placeholder para "acción programable"
+        end
 
-    // retardos y señales para ejecutar tercera instrucción (ciclo 3)
-    #5;
-    s_inc = 1;
-    s_inm = 0;
-    we3 = 0;
-    wez = 1;
-    Op = 3'b011;
-    #5;
+        6'b0001xx: begin  // Instrucción li
+          s_inc = 1; s_inm = 1; we3 = 1; wez = 0;
+          Op = 3'bxxx;  // Placeholder para "acción programable"
+        end
 
-    // retardos y señales para ejecutar cuarta instrucción (inicio del bucle)
-    #5;
-    s_inc = 1;
-    s_inm = 1;
-    we3 = 1;
-    wez = 0;
-    Op = 3'b100;
-    #5;
+        6'b010000: begin  // Instrucción j
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+          Op = 3'bxxx;  // Placeholder para "acción programable"
+        end
 
-    // retardos y señales para la primera iteración del bucle (ciclo 5)
-    #5;
-    s_inc = 0;
-    s_inm = 0;
-    we3 = 1;
-    wez = 0;
-    Op = 3'b101;
-    #5;
+        6'b010001: begin  // Instrucción jz
+        if (z == 1'b1) begin
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 1;
+        end
+        else begin 
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+        end
+          Op = 3'bxxx; // Placeholder para "acción programable"
+        end
 
-    // retardos y señales para la segunda iteración del bucle (ciclo 6)
-    #5;
-    s_inc = 1;
-    s_inm = 1;
-    we3 = 1;
-    wez = 1;
-    Op = 3'b110;
-    #5;
+        6'b010010: begin  // Instrucción jnz
+          if (z == 1'b1) begin
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+        end
+        else begin 
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 1;
+        end
+          Op = 3'bxxx; // Placeholder para "acción programable"
+        end
 
-    // retardos y señales para la tercera iteración del bucle (ciclo 7)
-    #5;
-    s_inc = 0;
-    s_inm = 0;
-    we3 = 1;
-    wez = 0;
-    Op = 3'b111;
-    #5;
-
-    // Se pueden agregar más ciclos según sea necesario
+        default: begin  // Opcodes no definidos
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+          Op = 3'b000;
+        end
+      endcase
+      #10;  // Tiempo entre instrucciones
+    end
 
     $finish;  // Termina la simulación
   end
 
-endmodule
+  // Monitor para observar las señales
+  initial begin
+    $monitor("Time: %0dns | clk: %b | reset: %b | Opcode: %b | s_inc: %b | s_inm: %b | we3: %b | wez: %b | Op: %b | z: %b",
+             $time, clk, reset, Opcode, s_inc, s_inm, we3, wez, Op, z);
+  end
 
+endmodule
