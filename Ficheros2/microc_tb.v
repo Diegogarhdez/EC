@@ -6,168 +6,101 @@
 // Práctica 2: diseño de una CPU simple
 // Fecha: 20/11/2024
 
+`timescale 1ns / 10ps
 
-`timescale 1 ns / 10 ps
 module microc_tb;
-  // Declaración de variables
-  wire [5:0] Opcode;
-  wire zero;
-  reg reset, s_inc, s_inm, we3, wez;
+
+  // declaración de variables
+  reg clk, reset;
+  reg s_inc, s_inm, we3, wez;
   reg [2:0] Op;
-  reg [3:0] state, nextstate;  // Corregido el tamaño del registro
-  reg clk;
+  wire z;
+  wire [5:0] Opcode;
 
-  // Codificación de los estados
-  parameter S0 = 4'b0000;  // Declaración de constantes que representan estados
-  parameter S1 = 4'b0001;
-  parameter S2 = 4'b0010;
-  parameter S3 = 4'b0011;
-  parameter S4 = 4'b0100;
-  parameter S5 = 4'b0101;
-  parameter S6 = 4'b0110;
-  parameter S7 = 4'b0111;
-  parameter S8 = 4'b1000;
-  parameter S9 = 4'b1001;
-  parameter S10 = 4'b1010;
+  microc microc1(Opcode, z, clk, reset, s_inc, s_inm , we3, wez, Op);
 
-  // Instanciación del microcontrolador
-  microc microc2(
-    .Opcode(Opcode),
-    .z(zero),
-    .clk(clk),
-    .reset(reset),
-    .s_inc(s_inc),
-    .s_inm(s_inm),
-    .we3(we3),
-    .wez(wez),
-    .Op(Op)
-  );
-
-  // Generación del reloj clk
+  // generación de reloj clk
   initial begin
     clk = 0;
-    forever #10 clk = ~clk;  // Periodo de 20 ns (10 ns alto, 10 ns bajo)
+    forever #5 clk = ~clk;  // Periodo de 10 ns
   end
 
-  // Bloque inicial para la simulación
+  // Reseteo y configuración de salidas del testbench
   initial begin
-    $dumpfile("microc_tb.vcd");
-    $dumpvars(0, microc_tb);  
+    $dumpfile("microc_tb.vcd");  // Archivo de salida para GTKWave
+    $dumpvars;                   // Guardar todas las variables para visualización
+
+    // Reset inicial
     reset = 1;
     s_inc = 0;
     s_inm = 0;
     we3 = 0;
     wez = 0;
     Op = 3'b000;
-    state = S0;
-    #20;
-    reset = 0;
-    #400;
-    $finish;
-  end 
-
-  // Máquina de estados para controlar las señales
-  always @(negedge clk) begin
-    case (state)
-      S0: begin
-        s_inc = 1'b1;
-        s_inm = 1'b1;
-        we3 = 1'b1;
-        Op = 3'b000;
-        wez = 1'b0;
-        nextstate = S1; 
-      end
-      S1: begin
-        s_inc = 1'b1;
-        s_inm = 1'b1;
-        we3 = 1'b1;
-        Op = 3'b000;
-        wez = 1'b0;
-        nextstate = S2;
-      end
-      S2: begin
-        s_inc = 1'b1;
-        s_inm = 1'b0;
-        we3 = 1'b1;
-        Op = 3'b100;
-        wez = 1'b1;
-        nextstate = S3; 
-      end
-      S3: begin
-        s_inc = 1'b1;
-        s_inm = 1'b0;
-        we3 = 1'b1;
-        Op = 3'b011;
-        wez = 1'b1;
-        nextstate = S4;
-      end
-      S4: begin
-        s_inc = !zero;
-        s_inm = 1'b0;
-        we3 = 1'b0;
-        wez = 1'b0; 
-        if(zero)
-          nextstate = S9;
-        else 
-          nextstate = S5;
-      end
-      S5: begin
-        s_inc = 1'b1;
-        s_inm = 1'b1;
-        we3 = 1'b1;
-        Op = 3'b010;
-        wez = 1'b1;
-        nextstate = S6; 
-      end
-      S6: begin
-        s_inc = 1'b1;
-        s_inm = 1'b1;
-        we3 = 1'b1;
-        Op = 3'b011;
-        wez = 1'b1;
-        nextstate = S7;
-      end
-      S7: begin
-        s_inc = !zero;
-        s_inm = 1'b0;
-        we3 = 1'b0;
-        wez = 1'b0; 
-        if(zero)
-          nextstate = S9;
-        else 
-          nextstate = S8;
-      end
-      S8: begin
-        s_inc = 1'b0;
-        s_inm = 1'b0;
-        we3 = 1'b0;
-        wez = 1'b0;
-        nextstate = S4; 
-      end
-      S9: begin
-        s_inc = 1'b1;
-        s_inm = 1'b0;
-        we3 = 1'b1;
-        Op = 3'b010;
-        wez = 1'b1;
-        nextstate = S10; 
-      end
-      S10: begin
-        s_inc = 1'b1;
-        s_inm = 1'b0;
-        we3 = 1'b1;
-        Op = 3'b011;
-        wez = 1'b1;
-        nextstate = S10;
-      end
-      default: nextstate = S0;
-    endcase
-
-    state <= nextstate;
+    
+    #10 reset = 0;  // Desactivar reset después de 10 ns
   end
+
+  // Bloque de simulación basado en Opcode
   initial begin
-    $monitor("Time=%0t ns | clk=%b | reset=%b | state=%b | s_inc=%b | s_inm=%b | we3=%b | wez=%b | Op=%b | Opcode=%b | zero=%b",
-             $time, clk, reset, state, s_inc, s_inm, we3, wez, Op, Opcode, zero);
+
+    // Simular instrucciones basadas en Opcode
+    repeat (14) begin
+      casez (Opcode)
+        6'b1?????: begin  // Instrucción operación de la alu
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 0;
+          Op = Opcode[4:2];  
+        end
+
+        6'b000000: begin  // Instrucción not
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 0;
+          Op = 3'b0;  
+        end
+
+        6'b0001??: begin  // Instrucción li
+          s_inc = 1; s_inm = 1; we3 = 1; wez = 0;
+          Op = 3'b0;  
+        end
+
+        6'b010000: begin  // Instrucción j
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+          Op = 3'b0;  
+        end
+
+        6'b010001: begin  // Instrucción jz
+        if (z == 1'b1) begin
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+        end
+        else begin 
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 0;
+        end
+          Op = 3'b0; 
+        end
+
+        6'b010010: begin  // Instrucción jnz
+          if (z == 1'b1) begin
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 0;
+        end
+        else begin 
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+        end
+          Op = 3'b0; 
+        end
+
+        default: begin  // Opcodes no definidos
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+          Op = 3'b000;
+        end
+      endcase
+      #10;  // Tiempo entre instrucciones
+    end
+    $finish;  // Termina la simulación
+  end
+
+  // Monitor para observar las señales
+  initial begin
+    $monitor("Time: %0dns | clk: %b | reset: %b | Opcode: %b | s_inc: %b | s_inm: %b | we3: %b | wez: %b | Op: %b | z: %b",
+             $time, clk, reset, Opcode, s_inc, s_inm, we3, wez, Op, z);
   end
 
 endmodule
