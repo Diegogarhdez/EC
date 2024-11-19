@@ -11,32 +11,42 @@ module microc(
   wire [3:0] RA1, RA2, WA3;
   wire zero;
   wire [9:0] Dir_salto;
-
   // Program Counter
   registro #(10) registro_pc(PC_actual, clk, reset, PC_nuevo);
+
   // Memoria de programa
   memprog memoria_programa(Instruccion, clk, PC_actual);
+
   // Obtención del Opcode
   assign Opcode = Instruccion[15:10];
+
   // Dirección de salto
   assign Dir_salto = Instruccion[9:0];
+
   // Direcciones de registros
   assign RA1 = Instruccion[11:8];
   assign RA2 = Instruccion[7:4];
   assign WA3 = Instruccion[3:0];
+
   // Valor inmediato
   assign Inmediato = Instruccion[7:0];  // Ajustado a 8 bits
+
   // Sumador para PC
   sum sum_pc(PC_incrementado, PC_actual, 10'b0000000001);
+
   // Mux para actualizar PC
   mux2 #(10) mux_pc(PC_nuevo, Dir_salto, PC_incrementado, s_inc);
+
   // Banco de registros
   regfile banco_registros(RD1, RD2, clk, we3, RA1, RA2, WA3, WD3);
+
   // ALU
   alu alu_inst(salida_alu, zero, RD1, RD2, Op);
+
   // Mux para seleccionar entre salida de ALU e inmediato
   mux2 #(8) mux_alu(WD3, salida_alu, Inmediato, s_inm);
-  // Registro para flag zero
+
+  // Flip-Flop Tipo D
   ffd registro_zero(clk, reset, zero, wez, z);
 
 endmodule
