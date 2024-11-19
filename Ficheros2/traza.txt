@@ -1,0 +1,18 @@
+traza:
+
+jmp Start
+Start: li
+li
+li
+li
+Iter: add
+sub
+jnz
+Iter: add
+sub
+jnz
+Fin
+Fin
+Fin
+
+...
