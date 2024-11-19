@@ -4,6 +4,8 @@
 // 1er cuatrimestre
 // Estructura de computadores
 // Práctica 2: diseño de una CPU simple
+// Fecha: 20/11/2024
+
 
 `timescale 1 ns / 10 ps
 module microc_tb;
