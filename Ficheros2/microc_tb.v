@@ -69,20 +69,20 @@ module microc_tb;
 
         6'b010001: begin  // Instrucción jz
         if (z == 1'b1) begin
-          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 1;
         end
         else begin 
-          s_inc = 1; s_inm = 0; we3 = 0; wez = 0;
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 1;
         end
           Op = 3'b0; 
         end
 
         6'b010010: begin  // Instrucción jnz
           if (z == 1'b1) begin
-          s_inc = 1; s_inm = 0; we3 = 0; wez = 0;
+          s_inc = 1; s_inm = 0; we3 = 0; wez = 1;
         end
         else begin 
-          s_inc = 0; s_inm = 0; we3 = 0; wez = 0;
+          s_inc = 0; s_inm = 0; we3 = 0; wez = 1;
         end
           Op = 3'b0; 
         end
