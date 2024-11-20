@@ -29,7 +29,10 @@ module microc_tb;
   initial begin
     $dumpfile("microc_tb.vcd");  // Archivo de salida para GTKWave
     $dumpvars;                   // Guardar todas las variables para visualización
-
+    $dumpvars(0, banco_registros.mux_alu.R[0]); 
+    $dumpvars(0, banco_registros.mux_alu.R[1]); 
+    $dumpvars(0, banco_registros.mux_alu.R[2]);
+    $dumpvars(0, banco_registros.mux_alu.R[3]);  
     s_inc = 0;
     s_inm = 0;
     we3 = 0;
@@ -39,7 +42,6 @@ module microc_tb;
   end
 
   initial begin 
-
     reset = 1;    // Reset inicial
     #10 reset = 0; // Desactivar reset después de 10 ns
   end
