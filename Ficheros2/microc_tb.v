@@ -29,10 +29,9 @@ module microc_tb;
   initial begin
     $dumpfile("microc_tb.vcd");  // Archivo de salida para GTKWave
     $dumpvars;                   // Guardar todas las variables para visualización
-    $dumpvars(0, banco_registros.mux_alu.R[0]); 
-    $dumpvars(0, banco_registros.mux_alu.R[1]); 
-    $dumpvars(0, banco_registros.mux_alu.R[2]);
-    $dumpvars(0, banco_registros.mux_alu.R[3]);  
+    $dumpvars(0, microc1.banco_registros.R[1]); 
+    $dumpvars(0, microc1.banco_registros.R[2]);
+    $dumpvars(0, microc1.banco_registros.R[3]);  
     s_inc = 0;
     s_inm = 0;
     we3 = 0;
@@ -53,7 +52,7 @@ module microc_tb;
     repeat (20) begin
       casez (Opcode)
         6'b1?????: begin  // Instrucción operación de la alu
-          s_inc = 1; s_inm = 0; we3 = 1; wez = 1;
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 0;
           Op = Opcode[4:2];  
         end
 
@@ -93,17 +92,17 @@ module microc_tb;
         end
 
         6'b0011??: begin  // Instrución add
-          s_inc = 0; s_inm = 1; we3 = 1; wez = 1; 
+          s_inc = 1; s_inm = 1; we3 = 1; wez = 1; 
           Op = Opcode [4:2];
         end
 
         6'b0101??: begin  // Instrucción and
-          s_inc = 0; s_inm = 0; we3 = 1; wez = 1; 
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 1; 
           Op = Opcode [4:2];
         end
 
         6'b0111??: begin // Instrucción or
-          s_inc = 0; s_inm = 0; we3 = 1; wez = 1; 
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 1; 
           Op = Opcode [4:2];
         end
 
