@@ -21,7 +21,7 @@ module microc_tb;
 
   // generación de reloj clk
   initial begin
-    clk = 0;
+    clk = 1;
     forever #5 clk = ~clk;  // Periodo de 10 ns
   end
 
@@ -42,7 +42,7 @@ module microc_tb;
 
   initial begin 
     reset = 1;    // Reset inicial
-    #10 reset = 0; // Desactivar reset después de 10 ns
+    #2 reset = 0; // Desactivar reset después de 10 ns
   end
 
   // Bloque de simulación basado en Opcode
@@ -51,8 +51,8 @@ module microc_tb;
     // Simular instrucciones basadas en Opcode
     repeat (20) begin
       casez (Opcode)
-        6'b1?????: begin  // Instrucción operación de la alu
-          s_inc = 1; s_inm = 0; we3 = 1; wez = 0;
+        6'b10????: begin  // Instrucción operación de la alu
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 1;
           Op = Opcode[4:2];  
         end
 
@@ -91,18 +91,18 @@ module microc_tb;
           Op = 3'b0; 
         end
 
-        6'b0011??: begin  // Instrución add
-          s_inc = 1; s_inm = 1; we3 = 1; wez = 1; 
-          Op = Opcode [4:2];
+        6'b0011??: begin  // Instrución add inmediato
+          s_inc = 1; s_inm = 1; we3 = 1; wez = 0; 
+          Op = 3'b010;
         end
 
         6'b0101??: begin  // Instrucción and
           s_inc = 1; s_inm = 0; we3 = 1; wez = 1; 
-          Op = Opcode [4:2];
+          Op = 3'b100;
         end
 
         6'b0111??: begin // Instrucción or
-          s_inc = 1; s_inm = 0; we3 = 1; wez = 1; 
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 0; 
           Op = Opcode [4:2];
         end
 
@@ -118,8 +118,8 @@ module microc_tb;
 
   // Monitor para observar las señales
   initial begin
-    $monitor("Time: %0dns | clk: %b | reset: %b | Opcode: %b | s_inc: %b | s_inm: %b | we3: %b | wez: %b | Op: %b | z: %b",
-             $time, clk, reset, Opcode, s_inc, s_inm, we3, wez, Op, z);
+    $monitor("Time:%0dns|clk:%b|reset:%b|Opcode:%b|s_inc:%b|s_inm:%b|we3:%b|wez:%b|Op:%b|z:%b|R1:%b|R2:%b|R3:%b|PC:%b ",
+             $time, clk, reset, Opcode, s_inc, s_inm, we3, wez, Op, z, microc1.banco_registros.R[1], microc1.banco_registros.R[2], microc1.banco_registros.R[3], microc1.PC_actual);
   end
 
 endmodule
