@@ -2,6 +2,7 @@
 module sum4(output wire[3:0] S, output wire[4:1] C, output wire c_out, input wire[3:0] A, input wire[3:0] B, input wire c_in);
 //contenido
 wire c1, c2, c3, c4;
+wire g0, g1, g2, g3, p0, p1, p2, p3;
 //wire[4:1] C;
 cla_4 cla(C[4:1], {g3, g2, g1, g0}, {p3, p2, p1, p0}, c_in);
 fa_v3 fa0(S[0], c1, p0, g0, A[0], B[0], c_in);

@@ -30,22 +30,25 @@ module microc_tb;
     $dumpfile("microc_tb.vcd");  // Archivo de salida para GTKWave
     $dumpvars;                   // Guardar todas las variables para visualización
 
-    // Reset inicial
-    reset = 1;
     s_inc = 0;
     s_inm = 0;
     we3 = 0;
     wez = 0;
     Op = 3'b000;
     
-    #10 reset = 0;  // Desactivar reset después de 10 ns
+  end
+
+  initial begin 
+
+    reset = 1;    // Reset inicial
+    #10 reset = 0; // Desactivar reset después de 10 ns
   end
 
   // Bloque de simulación basado en Opcode
   initial begin
-
+    #15; 
     // Simular instrucciones basadas en Opcode
-    repeat (14) begin
+    repeat (20) begin
       casez (Opcode)
         6'b1?????: begin  // Instrucción operación de la alu
           s_inc = 1; s_inm = 0; we3 = 1; wez = 0;
@@ -58,7 +61,7 @@ module microc_tb;
         end
 
         6'b0001??: begin  // Instrucción li
-          s_inc = 1; s_inm = 1; we3 = 1; wez = 0;
+          s_inc = 1; s_inm = 1; we3 = 1; wez = 1;
           Op = 3'b0;  
         end
 
@@ -85,6 +88,21 @@ module microc_tb;
           s_inc = 0; s_inm = 0; we3 = 0; wez = 1;
         end
           Op = 3'b0; 
+        end
+
+        6'b0011??: begin  // Instrución add
+          s_inc = 0; s_inm = 0; we3 = 1; wez = 1; 
+          Op = Opcode [4:2];
+        end
+
+        6'b0101??: begin  // Instrucción and
+          s_inc = 0; s_inm = 0; we3 = 1; wez = 1; 
+          Op = Opcode [4:2];
+        end
+
+        6'b0111??: begin // Instrucción or
+          s_inc = 0; s_inm = 0; we3 = 1; wez = 1; 
+          Op = Opcode [4:2];
         end
 
         default: begin  // Opcodes no definidos
