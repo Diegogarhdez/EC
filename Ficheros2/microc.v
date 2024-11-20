@@ -29,7 +29,7 @@ module microc(
   assign WA3 = Instruccion[3:0];
 
   // Valor inmediato
-  assign Inmediato = Instruccion[11:4];  // Ajustado a 8 bits
+  assign Inmediato = Instruccion[7:0];  // Ajustado a 8 bits
 
   // Sumador para PC
   sum sum_pc(PC_incrementado, PC_actual, 10'b0000000001);

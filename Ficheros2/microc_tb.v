@@ -51,7 +51,7 @@ module microc_tb;
     repeat (20) begin
       casez (Opcode)
         6'b1?????: begin  // Instrucción operación de la alu
-          s_inc = 1; s_inm = 0; we3 = 1; wez = 0;
+          s_inc = 1; s_inm = 0; we3 = 1; wez = 1;
           Op = Opcode[4:2];  
         end
 
@@ -91,7 +91,7 @@ module microc_tb;
         end
 
         6'b0011??: begin  // Instrución add
-          s_inc = 0; s_inm = 0; we3 = 1; wez = 1; 
+          s_inc = 0; s_inm = 1; we3 = 1; wez = 1; 
           Op = Opcode [4:2];
         end
 
